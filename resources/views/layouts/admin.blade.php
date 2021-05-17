@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>@yield('title') - 4School | CloverTech</title>
+    <link rel="icon" type="image/png" href="{{asset('assets/img/Logo Disco_Icon.png')}}">
+    <title>@yield('title') - Admin | DISCO</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
