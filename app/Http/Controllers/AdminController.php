@@ -7,7 +7,6 @@ use App\Models\Ruangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
-use Validator;
 
 class AdminController extends Controller
 {
@@ -87,40 +86,44 @@ class AdminController extends Controller
 
     public function showFormLogin()
     {
-        if (Auth::check()) { // true
-            //Login Success
-            return redirect()->route('home');
-        }
         return view('admin.login');
+        // if (Auth::check()) { // true
+        //     //Login Success
+        //     return redirect()->route('home');
     }
     public function login(Request $request)
     {
-        $rules = [
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ];
-        $messages = [
-            'email.required' => 'Email wajib diisi',
-            'email.email' => 'Email tidak valid',
-            'password.required' => 'Password wajib diisi',
-            'password.string' => 'Password harus berupa string',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect('/home');
         }
-        $data = [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
-        Auth::attempt($data);
-        if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
-            //Login Success
-            return redirect()->route('home');
-        } else { // false
-            //Login Fail
-            return redirect('login')->with('message', 'Email atau Password salah');
-        }
+        return redirect('/')->with('message', 'Email atau Password salah');
+
+        // $rules = [
+        //     'email' => 'required|email',
+        //     'password' => 'required|string',
+        // ];
+        // $messages = [
+        //     'email.required' => 'Email wajib diisi',
+        //     'email.email' => 'Email tidak valid',
+        //     'password.required' => 'Password wajib diisi',
+        //     'password.string' => 'Password harus berupa string',
+        // ];
+        // $validator = Validator::make($request->all(), $rules, $messages);
+        // if ($validator->fails()) {
+        //     return redirect()->back()->with('message', 'Email atau Password salah')->withErrors($validator)->withInput($request->all);
+        // }
+        // $data = [
+        //     'email' => $request->input('email'),
+        //     'password' => $request->input('password'),
+        // ];
+        // Auth::attempt($data);
+        // if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
+        //     //Login Success
+        //     return redirect()->route('home');
+        // } else { // false
+        //     //Login Fail
+        //     return redirect('login')->with('message', 'Email atau Password salah');
+        // }
 
     }
     public function logout()
@@ -135,7 +138,7 @@ class AdminController extends Controller
         return view('layouts.adminOpenRegis', compact('registStatus'));
     }
 
-    public function dasboard()
+    public function home()
     {
         return view('layout.admin');
     }

@@ -12,15 +12,17 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::post('/login ', 'AdminController@login')->name('Postlogin');
+Route::get('/', 'AdminController@showFormLogin')->name('login');
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\AdminController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/dasboard', function () {return view('home');});
+    Route::get('/home', [App\Http\Controllers\AdminController::class, 'index'])->name('home');
+    // Route::get('/home', function () {return view('home');});
     Route::get('logout', 'AdminController@logout')->name('logout');
 
     Route::get('/api', [PageController::class, 'index']);
